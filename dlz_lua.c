@@ -91,14 +91,14 @@ int
 dlz_lua_bindLog(lua_State *lua)
 {
         const char *str;
-		struct dlz_example_data *state;
+	struct dlz_example_data *state;
 
-		lua_getglobal(lua, "bindstate");
-		state = lua_touserdata(lua, 2);
+	lua_getglobal(lua, "bindstate");
+	state = lua_touserdata(lua, 2);
 
         if (lua_gettop(lua) >= 2) {
                 str =  lua_tostring(lua, 1);
-                state->log(ISC_LOG_INFO, "+++ LUA SAYS: %s\n", str);
+                state->log(ISC_LOG_INFO, "+++ LUA SAYS: %s", str);
         }
         return (0);
 }
