@@ -25,7 +25,7 @@ function lookup(name, zone, client)
 	end
 
 	if name == 'www' then
-		ret[1] = { type = "txt", ttl = 14, rdata = "hello Babe!" }
+		ret[1] = { type = "txt", ttl = 14, rdata = '"hello JP!"' }
 		ret[2] = { type = "MX", ttl = 23, rdata = "10 mail.gmail.com." }
 		ret[3] = { type = "txt", ttl = 14, rdata = "bye to you" }
 		ret[4] = { type = "AAAA", ttl = 84, rdata = "fe80::223:32ff:fed5:3f" }
