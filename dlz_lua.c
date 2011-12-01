@@ -91,10 +91,14 @@ int
 dlz_lua_bindLog(lua_State *lua)
 {
         const char *str;
+		struct dlz_example_data *state;
 
-        if (lua_gettop(lua) >= 1) {
+		lua_getglobal(lua, "bindstate");
+		state = lua_touserdata(lua, 2);
+
+        if (lua_gettop(lua) >= 2) {
                 str =  lua_tostring(lua, 1);
-                fprintf(stderr, "+++ LUA SAYS: %s\n", str);
+                state->log(ISC_LOG_INFO, "+++ LUA SAYS: %s\n", str);
         }
         return (0);
 }
@@ -153,6 +157,10 @@ dlz_create(const char *dlzname, unsigned int argc, char *argv[],
         /* Add local functions to Lua interpreter */
 	lua_pushcfunction(state->L, dlz_lua_bindLog);
 	lua_setglobal(state->L, "bindlog");
+
+	/* Store our state pointer inside lua */
+	lua_pushlightuserdata (state->L, (void *) state);
+	lua_setglobal(state->L, "bindstate");
 
 	/* Attempt to load the Lua script */
 	error = luaL_dofile(state->L, state->lua_script);
