@@ -38,3 +38,8 @@ I'm anything but a Lua expert, so I need your help.
 Files in this directory:
 
 * `dlz_minimal.h` is a copy from BIND's `contrib/dlz/example`.
+
+## Requirements
+
+* [BIND](http://www.isc.org/software/bind) with dlopen()
+* [Lua](http://www.lua.org/)
