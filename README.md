@@ -8,6 +8,7 @@ Steps:
 1. Compile the driver, which ought to create a `dlz_lua.so`.
 2. Add the driver to your `named.conf` using the sample provided.
 3. Restart BIND and cross your fingers. :)
+4. After modifying your Lua script, run `rndc reconfig` to force BIND to reload the driver.
 
 ## Examples
 
@@ -18,7 +19,7 @@ some of this code from. ;-)
 ### Timestamp
 
 	$ dig +noall +answer time.example.nil any
-	time.example.nil.  0  IN  TXT  "2011-12-01T10:41:48+0100
+	time.example.nil.  0  IN  TXT  "2011-12-01T10:41:48+0100"
 
 ### Random password generator
 
@@ -43,3 +44,4 @@ Files in this directory:
 
 * [BIND](http://www.isc.org/software/bind) with dlopen()
 * [Lua](http://www.lua.org/)
+
