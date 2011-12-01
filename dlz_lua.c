@@ -3,7 +3,7 @@
  * A dlz_dlopen() driver for BIND's named which implements a Lua back-end.
  * Handle with care. ;-)
  *
- * Most of this code is swiped from
+ * With the exception of the Lua integration, most of this code is taken from
  *	$Id: dlz_example.c,v 1.3 2011-10-20 22:01:48 each Exp $ 
  */
 
@@ -93,6 +93,8 @@ dlz_lua_bindLog(lua_State *lua)
         const char *str;
 	struct dlz_example_data *state;
 
+	/* Retrieve BIND's `state' pointer from the Lua stack. */
+
 	lua_getglobal(lua, "bindstate");
 	state = lua_touserdata(lua, 2);
 
@@ -158,11 +160,15 @@ dlz_create(const char *dlzname, unsigned int argc, char *argv[],
 	lua_pushcfunction(state->L, dlz_lua_bindLog);
 	lua_setglobal(state->L, "bindlog");
 
-	/* Store our state pointer inside lua */
+	/* Store our state pointer inside Lua. This state is later
+	 * used by functions called FROM WITHIN the Lua script (e.g.
+	 * dlz_lua_bindLog() to access BIND's state. 
+	 */
+
 	lua_pushlightuserdata (state->L, (void *) state);
 	lua_setglobal(state->L, "bindstate");
 
-	/* Attempt to load the Lua script */
+	/* Attempt to load the Lua script file */
 	error = luaL_dofile(state->L, state->lua_script);
 	if (error) {
 		state->log(ISC_LOG_ERROR,
