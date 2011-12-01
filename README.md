@@ -34,7 +34,7 @@ I'm anything but a Lua expert, so I need your help.
   called from Lua, I want to pass a "state" pointer from C into Lua
   and back into C. Currently, bindlog() prints to stderr, but I need
   to be able to syslog() it via named, for which I need this state.
-  How can I do that?
+  How can I do that? Solved by Peter van Dijk with [this patch][2].
 
 Files in this directory:
 
@@ -45,3 +45,4 @@ Files in this directory:
 * [BIND](http://www.isc.org/software/bind) with dlopen()
 * [Lua](http://www.lua.org/)
 
+  [2]: https://github.com/jpmens/dlz_lua/pull/1.patch
