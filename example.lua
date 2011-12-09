@@ -25,10 +25,7 @@ function lookup(name, zone, client)
 	end
 
 	if name == 'www' then
-		ret[1] = { type = "txt", ttl = 14, rdata = '"hello JP!"' }
-		ret[2] = { type = "MX", ttl = 23, rdata = "10 mail.gmail.com." }
-		ret[3] = { type = "txt", ttl = 14, rdata = "bye to you" }
-		ret[4] = { type = "AAAA", ttl = 84, rdata = "fe80::223:32ff:fed5:3f" }
+		ret = www()
 	end
 
 	if name == 'jp' then
@@ -44,7 +41,30 @@ function lookup(name, zone, client)
 		ret[1] = { type = "TXT", ttl = 0, rdata = '"' .. generate(15, 15) .. '"' }
 	end
 
+	-- Allow query for "N.password" for generating passwords of length N
+	if string.find(name, '.password') then
+		pwlen = explode('.', name)[1]
+		if tonumber(pwlen) == nil then
+			pwlen = 8
+		end
+		if tonumber(pwlen) < 1 or tonumber(pwlen) > 40 then
+			pwlen = 10
+		end
+		ret[1] = { type = "TXT", ttl = 0, rdata = '"' .. generate(pwlen, pwlen) .. '"' }
+	end
+
 	return 0, ret
+end
+
+function www()
+        rrset = {}
+
+        rrset[1] = { type = "txt", ttl = 3600, rdata = '"Hello JP!"' }
+        rrset[2] = { type = "MX", ttl = 23, rdata = "10 mail.gmail.com." }
+        rrset[3] = { type = "txt", ttl = 14, rdata = "bye to you" }
+        rrset[4] = { type = "AAAA", ttl = 84, rdata = "fe80::223:32ff:fed5:3f" }
+
+        return rrset
 end
 
 --[[
@@ -100,3 +120,23 @@ function generate(s, l) -- args: smallest and largest possible password lengths,
 	end
 	return(table.concat(pass)) -- concatenate all indicies of the "pass" array, then print out concatenation.
 end
+
+-- explode(separator, string)		-- http://lua-users.org/wiki/SplitJoin
+function explode(d,p)
+  local t, ll
+  t={}
+  ll=0
+  if(#p == 1) then return {p} end
+    while true do
+      l=string.find(p,d,ll,true) -- find the next d in the string
+      if l~=nil then -- if "not not" found then..
+        table.insert(t, string.sub(p,ll,l-1)) -- Save it in our array.
+        ll=l+1 -- save just after where we found it for searching next time.
+      else
+        table.insert(t, string.sub(p,ll)) -- Save what's left in our array.
+        break -- Break at end, as it should be, according to the lua manual.
+      end
+    end
+  return t
+end
+
