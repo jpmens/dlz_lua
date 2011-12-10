@@ -16,8 +16,7 @@ function lookup(name, zone, client)
 	bindlog("Lua lookup(" .. name .. ", " .. zone .. ", " .. client .. ")")
 
 	if name == '@' then
-		ret[1] = { type = 'SOA', ttl = 86400, 
-			   rdata = 'example.nil. hostmaster.example.nil. 123 900 600 86400 3600' }
+		ret[1] = soa(zone)
 		ret[2] = { type = 'NS', ttl = 86400, rdata = 'jmbp.ww.mens.de' }
 		ret[3] = { type = 'NS', ttl = 86400, rdata = 'example.nil' }
 		ret[4] = { type = 'A', ttl = 86400, rdata = '127.0.0.2' }
@@ -54,6 +53,14 @@ function lookup(name, zone, client)
 	end
 
 	return 0, ret
+end
+
+function soa(zone)
+	rr = {	type	= 'SOA',
+		ttl	= 3600,
+		rdata	= zone .. '. root.' .. zone .. '. 1 900 600 86400 3600'
+	}
+	return rr
 end
 
 function www()
